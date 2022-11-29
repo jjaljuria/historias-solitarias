@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-import UserController from "./UserController";
+import * as UserController from "./AuthorController";
 import { Author } from "../models/Author";
+import request from "supertest";
+import { app } from "../index";
 
 Author.findById = vi.fn((id: string) => {
-  if (id === "") {
+  if (id === "000") {
     return null;
   }
 
@@ -23,13 +25,17 @@ describe("UserController", () => {
   });
 
   it("should to give id to getAuthor and it return author model", async () => {
-    const author = await UserController.getAuthor("123");
+    const response = await request(app).get("/api/author/123").send();
+    const author = response.body;
+    expect(response.statusCode).toBe(200);
     expect(author._id).toBe("123");
     expect(author.name).toBe("jose");
   });
 
   it("should to give idAuthor that not exist return null", async () => {
-    const author = await UserController.getAuthor("");
+    const response = await request(app).get("/api/author/000").send();
+    const author = response.body;
+    expect(response.statusCode).toBe(200);
     expect(author).toBeNull();
   });
 });
