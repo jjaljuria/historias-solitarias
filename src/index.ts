@@ -2,8 +2,9 @@ import express from "express";
 import "./database";
 import * as Handlebars from "express-handlebars";
 import path from "path";
-import AuthorRouter from "./routes/AuthorRoute";
-import StoryRouter from "./routes/StoryRoute";
+import AuthorRouter from "./routes/AuthorRouter";
+import StoryRouter from "./routes/StoryRouter";
+import IndexRouter from "./routes/IndexRouter";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -23,7 +24,18 @@ app.set("views", path.join(__dirname, "views"));
 app.engine(
   "hbs",
   Handlebars.engine({
-    defaultLayout: false,
+    extname: "hbs",
+    runtimeOptions: {
+      allowProtoPropertiesByDefault: true,
+      allowProtoMethodsByDefault: true,
+    },
+    helpers: {
+      date: function (date: Date) {
+        return `${date.getDate() > 9 ? date.getDate() : "0" + date.getDate()}-${
+          date.getMonth() - 1
+        }-${date.getFullYear()}`;
+      },
+    },
   })
 );
 
@@ -33,12 +45,17 @@ app.set("view engine", "hbs");
 app.use(express.json());
 
 // Routes
-app.use("/api", AuthorRouter);
-app.use("/api", StoryRouter);
+app.use("/", IndexRouter);
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+app.use(AuthorRouter);
+app.use(StoryRouter);
+
+// Static Files
+app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  "/css",
+  express.static(path.join(__dirname, "../node_modules/bootstrap/dist/css"))
+);
 
 app.listen(3000, () => {
   console.log("server on port 3000");

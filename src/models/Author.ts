@@ -1,8 +1,11 @@
-import { Schema, model, ObjectId } from "mongoose";
+import { Schema, model, ObjectId, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
+export interface IAuthorModel extends Model<IAuthor> {
+  encryptPassword(password: string): string;
+}
+
 export interface IAuthor {
-  _id: ObjectId;
   name: string;
   password: string;
   description: string;
@@ -26,8 +29,8 @@ const authorSchema: Schema = new Schema<IAuthor>(
   }
 );
 
-authorSchema.methods.encryptPassword = async (password: string) => {
-  const salt = await bcrypt.genSalt(100);
+authorSchema.statics.encryptPassword = async (password: string) => {
+  const salt = await bcrypt.genSalt(10);
   const hash = bcrypt.hash(password, salt);
   return hash;
 };
@@ -36,4 +39,4 @@ authorSchema.methods.matchPassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-export const Author = model<IAuthor>("Author", authorSchema);
+export const Author = model<IAuthor, IAuthorModel>("Author", authorSchema);

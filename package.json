@@ -6,7 +6,8 @@
   "scripts": {
     "test": "vitest",
     "dev": "ts-node-dev src/index.ts",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "seed": "ts-node src/seeds/index.ts"
   },
   "keywords": [],
   "author": "Jośe Aljuria",
@@ -26,10 +27,12 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@testing-library/dom": "^8.19.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
+    "@types/mongoose-seeder": "^1.2.6",
     "@types/morgan": "^1.9.3",
     "@types/supertest": "^2.0.12",
     "@types/uuid": "^8.3.4",
@@ -44,6 +47,8 @@
     "eslint-plugin-testing-library": "^5.9.1",
     "eslint-prettier": "0.0.0-empty",
     "happy-dom": "^7.7.0",
+    "mongoose-seed": "^0.6.0",
+    "mongoose-seeder": "^1.2.1",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.0",
     "supertest": "^6.3.1",

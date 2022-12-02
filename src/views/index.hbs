@@ -1,1 +1,28 @@
-<h1>Hola</h1>
+<main class="container">
+  <div class="card mt-4">
+    <div class="card-body">
+      <h1 class="display-5 card-title">{{author.name}}</h1>
+    </div>
+    <div class="card-body">
+      <p>{{author.description}}</p>
+
+      <div class="text-end">
+        <a class="btn btn-primary" href="/stories/{{author.name}}">Ver Historias</a>
+      </div>
+
+    </div>
+  </div>
+
+  <h2 class="my-4">Útltimas Hitorias</h2>
+
+  {{#each stories as |story|}}
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <h3 class="card-title text-decoration-underline">{{story.title}}</h3>
+        <p class="">{{story.summary}}</p>
+      </div>
+    </div>
+
+  {{/each}}
+</main>

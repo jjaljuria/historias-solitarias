@@ -24,5 +24,12 @@ export const getStories: RequestHandler = async (req, res) => {
   const stories = await Story.find({ author: authorFound._id }, null, {
     limit: result,
   }).populate("author");
-  return res.json({ stories: stories });
+  return res.render("stories", { stories: stories });
+};
+
+export const getStory: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+  const story = await Story.findById(id).populate("author", "name");
+
+  res.render("story", { story });
 };

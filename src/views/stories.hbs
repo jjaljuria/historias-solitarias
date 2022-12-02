@@ -1,0 +1,13 @@
+<main class="container">
+  {{#each stories as |story|}}
+
+    <div class="card my-2">
+      <div class="card-body">
+        <h3 class="card-title text-decoration-underline">{{story.title}}</h3>
+        <p class="">{{story.summary}}</p>
+        <a href="/story/{{story.id}}" class="btn btn-primary">Ver</a>
+      </div>
+    </div>
+
+  {{/each}}
+</main>

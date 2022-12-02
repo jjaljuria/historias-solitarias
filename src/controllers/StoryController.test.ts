@@ -101,7 +101,6 @@ describe("StoryController", () => {
       const response = await request(app).get("/api/stories/jose").query({
         limit: "lorem",
       });
-      console.log(response.body);
       expect(response.body).toBe("Limit is not valid");
     });
   });

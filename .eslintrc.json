@@ -16,7 +16,8 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "prettier"
+        "prettier",
+        "testing-library"
     ],
     "rules": {
     }
