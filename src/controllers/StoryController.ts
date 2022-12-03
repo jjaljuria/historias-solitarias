@@ -3,7 +3,6 @@ import { Story } from "../models/Story";
 import { Author } from "../models/Author";
 
 export const getStories: RequestHandler = async (req, res) => {
-  const { author } = req.params;
   const { limit } = req.query;
 
   let result = undefined;
@@ -15,13 +14,7 @@ export const getStories: RequestHandler = async (req, res) => {
     }
   }
 
-  const authorFound = await Author.findOne({ name: author });
-
-  if (!authorFound) {
-    return res.send("Author not found").status(404);
-  }
-
-  const stories = await Story.find({ author: authorFound._id }, null, {
+  const stories = await Story.find({}, null, {
     limit: result,
   }).populate("author");
   return res.render("stories", { stories: stories });
