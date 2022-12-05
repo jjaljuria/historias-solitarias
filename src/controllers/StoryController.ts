@@ -1,23 +1,36 @@
 import { RequestHandler } from "express";
 import { Story } from "../models/Story";
-import { Author } from "../models/Author";
 
 export const getStories: RequestHandler = async (req, res) => {
-  const { limit } = req.query;
+  const defaultOffset: string = "0";
+  const limit: number = 5;
+  const offset: number = parseInt(
+    (req.query.offset ?? defaultOffset) as string
+  );
 
-  let result = undefined;
-  if (limit) {
-    result = parseInt(limit as string);
-
-    if (isNaN(result)) {
-      return res.json("Limit is not valid").status(500);
-    }
+  if (isNaN(offset) || offset < 0) {
+    return res.json("Offset is not valid").status(500);
   }
 
-  const stories = await Story.find({}, null, {
-    limit: result,
-  }).populate("author");
-  return res.render("stories", { stories: stories });
+  const stories = await Story.find({})
+    .populate("author")
+    .skip(offset)
+    .limit(limit);
+
+  const storyTotal: number = await Story.count();
+
+  const totalPages: number = Math.ceil(storyTotal / limit);
+  const currentPage: number = Math.ceil(offset / limit);
+
+  return res.render("stories", {
+    stories: stories,
+    pagination: {
+      totalStories: storyTotal,
+      currentPage,
+      totalPages,
+      storiesForPage: limit,
+    },
+  });
 };
 
 export const getStory: RequestHandler = async (req, res) => {

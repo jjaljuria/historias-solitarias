@@ -5,6 +5,7 @@ import path from "path";
 import AuthorRouter from "./routes/AuthorRouter";
 import StoryRouter from "./routes/StoryRouter";
 import IndexRouter from "./routes/IndexRouter";
+import Helpers from "./views/helpers";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -29,13 +30,7 @@ app.engine(
       allowProtoPropertiesByDefault: true,
       allowProtoMethodsByDefault: true,
     },
-    helpers: {
-      date: function (date: Date) {
-        return `${date.getDate() > 9 ? date.getDate() : "0" + date.getDate()}-${
-          date.getMonth() - 1
-        }-${date.getFullYear()}`;
-      },
-    },
+    helpers: Helpers,
   })
 );
 

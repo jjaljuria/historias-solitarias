@@ -39,3 +39,5 @@ export const logUp: RequestHandler = async (req, res) => {
 
   return res.send("Success Operation");
 };
+
+export const login: RequestHandler = (req, res) => {};
