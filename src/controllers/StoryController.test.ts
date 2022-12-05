@@ -4,13 +4,13 @@ import request from "supertest";
 import { app } from "../index";
 import { Story } from "../models/Story";
 
-const mockLimitFunction = vi.fn((lim: number) => Promise.resolve([]));
+const mockOffsetFunction = vi.fn((offset: number) => ({
+  limit: () => Promise.resolve([]),
+}));
 
 Story.find = (): any => ({
   populate: (path: string) => ({
-    skip: (s: number) => ({
-      limit: mockLimitFunction,
-    }),
+    skip: mockOffsetFunction,
   }),
 });
 
@@ -27,28 +27,30 @@ describe("StoryController", () => {
 
   describe("URL /api/stories", () => {
     afterEach(() => {
-      mockLimitFunction.mockReset();
+      mockOffsetFunction.mockReset();
     });
 
     it("should return reponse 200 and have offse 0", async () => {
       const response = await request(app).get("/stories");
       expect(response.statusCode).toBe(200);
-      expect(mockLimitFunction).toHaveBeenCalledWith(0);
+      expect(mockOffsetFunction).toHaveBeenCalledWith(0);
     });
 
-    it("should return reponse 200 and have offse 2", async () => {
-      const response = await request(app).get("/stories").query({ limit: 2 });
-      expect(response.statusCode).toBe(200);
-      expect(mockLimitFunction).toHaveBeenCalledWith(2);
-    });
-
-    it("should return reponse 200 and have offse 2", async () => {
+    it.todo("should return reponse 200 and have offse 2", async () => {
       const response = await request(app)
         .get("/stories")
-        .query({ limit: "juan" });
+        .query({ offset: "2" });
+      expect(response.statusCode).toBe(200);
+      expect(mockOffsetFunction).toHaveBeenCalledWith(0);
+    });
 
-      expect(response.body).toBe("Limit is not valid");
-      expect(mockLimitFunction).not.toHaveBeenCalled();
+    it("should if offet is not number return Offset is not valid", async () => {
+      const response = await request(app)
+        .get("/stories")
+        .query({ offset: "juan" });
+
+      expect(response.body).toBe("Offset is not valid");
+      expect(mockOffsetFunction).not.toHaveBeenCalled();
     });
   });
 });

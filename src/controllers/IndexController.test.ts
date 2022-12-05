@@ -9,7 +9,7 @@ import { Story, IStory } from "../models/Story";
 import mongoose from "mongoose";
 
 const author: IAuthor = {
-  name: "jose",
+  username: "jose",
   password: "123",
   description: "lorem ipsup",
 };

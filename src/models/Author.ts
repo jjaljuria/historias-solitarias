@@ -3,17 +3,18 @@ import bcrypt from "bcryptjs";
 
 export interface IAuthorModel extends Model<IAuthor> {
   encryptPassword(password: string): string;
+  matchPassword(password: string): boolean;
 }
 
 export interface IAuthor {
-  name: string;
+  username: string;
   password: string;
   description: string;
 }
 
 const authorSchema: Schema = new Schema<IAuthor>(
   {
-    name: {
+    username: {
       type: String,
       required: true,
       unique: true,

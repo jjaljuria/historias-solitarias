@@ -17,10 +17,10 @@ export const getAuthor: RequestHandler = async (req, res) => {
 
 export const logUp: RequestHandler = async (req, res) => {
   try {
-    let newAuthor = await Author.findOne({ name: "jose" });
+    let newAuthor = await Author.findOne({ username: "jose" });
     if (!newAuthor) {
       newAuthor = await Author.create({
-        name: "jose",
+        username: "jose",
         description: faker.lorem.paragraph(),
         password: await Author.encryptPassword("12345"),
       });
