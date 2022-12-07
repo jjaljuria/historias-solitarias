@@ -1,9 +1,12 @@
 import { Schema, model, ObjectId, Model } from "mongoose";
 import bcrypt from "bcryptjs";
 
-export interface IAuthorModel extends Model<IAuthor> {
-  encryptPassword(password: string): string;
-  matchPassword(password: string): boolean;
+export interface IAuthorModel extends Model<IAuthor, {}, IAuthorMethods> {
+  encryptPassword(password: string): Promise<string>;
+}
+
+interface IAuthorMethods {
+  matchPassword(password: string): Promise<boolean>;
 }
 
 export interface IAuthor {
@@ -12,7 +15,9 @@ export interface IAuthor {
   description: string;
 }
 
-const authorSchema: Schema = new Schema<IAuthor>(
+type AuthorModel = Model<IAuthor, {}, IAuthorMethods>;
+
+const authorSchema: Schema = new Schema<IAuthor, AuthorModel, IAuthorMethods>(
   {
     username: {
       type: String,
@@ -30,13 +35,17 @@ const authorSchema: Schema = new Schema<IAuthor>(
   }
 );
 
-authorSchema.statics.encryptPassword = async (password: string) => {
+authorSchema.statics.encryptPassword = async (
+  password: string
+): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
   const hash = bcrypt.hash(password, salt);
   return hash;
 };
 
-authorSchema.methods.matchPassword = async function (password: string) {
+authorSchema.methods.matchPassword = async function (
+  password: string
+): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
 

@@ -12,25 +12,29 @@ export const getStories: RequestHandler = async (req, res) => {
     return res.json("Offset is not valid").status(500);
   }
 
-  const stories = await Story.find({})
-    .populate("author")
-    .skip(offset)
-    .limit(limit);
+  try {
+    const stories = await Story.find({})
+      .populate("author")
+      .skip(offset)
+      .limit(limit);
+    const storyTotal: number = await Story.count();
 
-  const storyTotal: number = await Story.count();
+    const totalPages: number = Math.ceil(storyTotal / limit);
+    const currentPage: number = Math.ceil(offset / limit);
 
-  const totalPages: number = Math.ceil(storyTotal / limit);
-  const currentPage: number = Math.ceil(offset / limit);
-
-  return res.render("stories", {
-    stories: stories,
-    pagination: {
-      totalStories: storyTotal,
-      currentPage,
-      totalPages,
-      storiesForPage: limit,
-    },
-  });
+    return res.render("stories", {
+      stories: stories,
+      pagination: {
+        totalStories: storyTotal,
+        currentPage,
+        totalPages,
+        storiesForPage: limit,
+      },
+    });
+  } catch (err) {
+    console.trace(err);
+    return res.json("Ups have a error");
+  }
 };
 
 export const getStory: RequestHandler = async (req, res) => {

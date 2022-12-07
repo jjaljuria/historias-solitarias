@@ -4,16 +4,18 @@ import request from "supertest";
 import { app } from "../index";
 import { Story } from "../models/Story";
 
-const mockOffsetFunction = vi.fn((offset: number) => ({
-  limit: () => Promise.resolve([]),
-}));
+const mockOffsetFunction = vi.fn();
 
 Story.find = (): any => ({
   populate: (path: string) => ({
-    skip: mockOffsetFunction,
+    skip: (offset: number) => {
+      mockOffsetFunction(offset);
+      return {
+        limit: (lim: number) => Promise.resolve([]),
+      };
+    },
   }),
 });
-
 Story.count = (): number => 10;
 
 describe("StoryController", () => {
@@ -36,12 +38,10 @@ describe("StoryController", () => {
       expect(mockOffsetFunction).toHaveBeenCalledWith(0);
     });
 
-    it.todo("should return reponse 200 and have offse 2", async () => {
-      const response = await request(app)
-        .get("/stories")
-        .query({ offset: "2" });
+    it("should return reponse 200 and have offse 2", async () => {
+      const response = await request(app).get("/stories").query({ offset: 2 });
       expect(response.statusCode).toBe(200);
-      expect(mockOffsetFunction).toHaveBeenCalledWith(0);
+      expect(mockOffsetFunction).toHaveBeenCalledWith(2);
     });
 
     it("should if offet is not number return Offset is not valid", async () => {

@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import * as AuthorController from "./AuthorController";
-import { Author } from "../models/Author";
+import { Author, IAuthor } from "../models/Author";
 import request from "supertest";
 import { app } from "../index";
 
@@ -27,6 +27,37 @@ describe("AuthorController", () => {
   describe("Login Page", () => {
     it("should exist AuthorController.login", () => {
       expect(AuthorController.login).toBeDefined();
+    });
+
+    it("should response with a 200 status code when login page loaded", async () => {
+      const response: request.Response = await request(app)
+        .get("/login")
+        .send();
+      expect(response.statusCode).toBe(200);
+    });
+
+    it("should respond with a 200 status code", async () => {
+      const author = {
+        id: "12345",
+        username: "jose",
+        password: "12345",
+        description: "",
+        matchPassword: (password: boolean) => Promise.resolve(true),
+      };
+
+      const mockFindOne = vi.spyOn(Author, "findOne");
+      mockFindOne.mockReturnValueOnce(author);
+      const response = await request(app).post("/login").send(author);
+      expect(response.statusCode).toBe(200);
+    });
+
+    it("should respond with a status code of 404", async () => {
+      const bodyData = [{ username: "username" }, { password: "password" }];
+
+      for (const body of bodyData) {
+        const response = await request(app).post("/login").send(body);
+        expect(response.statusCode).toBe(302);
+      }
     });
   });
 });

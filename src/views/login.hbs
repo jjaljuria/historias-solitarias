@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-4 offset-md-4">
+      <form action="/login" method="post" class="bg-light p-3 rounded mt-5">
+        <h2 class="mb-3">Iniciar Sesión</h2>
+        {{#if errors}}
+          <div class="text-danger">
+            {{errors}}
+          </div>
+        {{/if}}
+        <div class="mb-3">
+          <label class="form-label">Nombre de Usuario</label>
+          <input
+            type="text"
+            id="username"
+            class="form-control"
+            name="username"
+            required
+          />
+
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            name="password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+      </form>
+    </div>
+  </div>
+</div>

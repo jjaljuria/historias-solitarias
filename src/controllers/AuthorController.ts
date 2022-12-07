@@ -40,4 +40,18 @@ export const logUp: RequestHandler = async (req, res) => {
   return res.send("Success Operation");
 };
 
-export const login: RequestHandler = (req, res) => {};
+declare module "express-session" {
+  interface SessionData {
+    messages: string[];
+  }
+}
+
+export const login: RequestHandler = (req, res) => {
+  const { messages } = req.session;
+  req.session.messages = undefined;
+  return res.render("login", { errors: messages });
+};
+
+export const verifyAuthor: RequestHandler = (req, res) => {
+  return res.redirect("/");
+};

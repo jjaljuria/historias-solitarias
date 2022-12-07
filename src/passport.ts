@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
-import { Author, IAuthor } from "./models/Author";
+import { Author, IAuthor, IAuthorModel } from "./models/Author";
 
 passport.use(
   new Strategy(
@@ -8,18 +8,22 @@ passport.use(
       usernameField: "username",
     },
     async (username, password, done) => {
-      const author = await Author.findOne({ username });
+      try {
+        const author = await Author.findOne({ username });
 
-      if (!author) {
-        return done(null, false, { message: "Author not found" });
+        if (!author) {
+          return done(null, false, { message: "Username is not exist" });
+        }
+
+        const isPassword = await author.matchPassword(password);
+        if (isPassword) {
+          return done(null, author);
+        }
+      } catch (err) {
+        return done(err);
       }
 
-      const isPassword = await author.matchPassword(password);
-      if (isPassword) {
-        return done(null, author);
-      }
-
-      return done(null, false, { message: "Incorrect Password" });
+      return done(null, false, { message: "Password is Incorrect" });
     }
   )
 );
