@@ -43,3 +43,7 @@ export const getStory: RequestHandler = async (req, res) => {
 
   res.render("story", { story });
 };
+
+export const newStory: RequestHandler = async (req, res) => {
+  return res.render("newStory");
+};

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import * as AuthorController from "./AuthorController";
-import { Author, IAuthor } from "../models/Author";
+import { Author } from "../models/Author";
 import request from "supertest";
 import { app } from "../index";
 
@@ -36,7 +36,7 @@ describe("AuthorController", () => {
       expect(response.statusCode).toBe(200);
     });
 
-    it("should respond with a 200 status code", async () => {
+    it("should when success authenticate redirect to / ", async () => {
       const author = {
         id: "12345",
         username: "jose",
@@ -48,15 +48,17 @@ describe("AuthorController", () => {
       const mockFindOne = vi.spyOn(Author, "findOne");
       mockFindOne.mockReturnValueOnce(author);
       const response = await request(app).post("/login").send(author);
-      expect(response.statusCode).toBe(200);
+      expect(response.redirect).toBeTruthy();
+      expect(response.header.location).toBe("/");
     });
 
-    it("should respond with a status code of 404", async () => {
+    it("should when fail authenticate redirect to /login", async () => {
       const bodyData = [{ username: "username" }, { password: "password" }];
 
       for (const body of bodyData) {
         const response = await request(app).post("/login").send(body);
-        expect(response.statusCode).toBe(302);
+        expect(response.redirect).toBeTruthy();
+        expect(response.header.location).toBe("/login");
       }
     });
   });
