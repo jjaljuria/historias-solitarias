@@ -90,5 +90,13 @@ describe("StoryController", () => {
       getByRole(document, "textbox", { name: "contenido" });
       getByRole(document, "button", { name: "Guardar" });
     });
+
+    it("should respond a id of the story", async () => {
+      const story = {
+        title: "the epic story",
+        body: "",
+      };
+      const response = await request(app).post("/new-story", {});
+    });
   });
 });

@@ -29,7 +29,7 @@ export const logUp: RequestHandler = async (req, res) => {
     for (let i = 0; i < 5; i++) {
       await Story.create({
         title: faker.lorem.words(),
-        text: faker.lorem.paragraphs(5),
+        body: faker.lorem.paragraphs(5),
         author: newAuthor.id,
       });
     }

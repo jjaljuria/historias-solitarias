@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 export interface IStory {
   title: string;
-  text: string;
+  body: string;
   author: Schema.Types.ObjectId;
   summary?: string;
   createdAt: string;
@@ -15,7 +15,7 @@ const storySchema: Schema = new Schema<IStory>(
       required: true,
       unique: true,
     },
-    text: {
+    body: {
       type: String,
       required: true,
     },
@@ -31,7 +31,7 @@ const storySchema: Schema = new Schema<IStory>(
 );
 
 storySchema.pre("save", function (next) {
-  this.summary = this.text.substring(0, 240);
+  this.summary = this.body.substring(0, 240);
   next();
 });
 
