@@ -47,3 +47,19 @@ export const getStory: RequestHandler = async (req, res) => {
 export const newStory: RequestHandler = async (req, res) => {
   return res.render("newStory");
 };
+
+export const saveStory: RequestHandler = async (req, res) => {
+  const { title, body } = req.body;
+  try {
+    const newStory = new Story({
+      title,
+      body,
+    });
+
+    await newStory.save();
+    return res.redirect(`/story/${newStory.id}`);
+  } catch (err) {
+    console.trace(err);
+    return res.status(500);
+  }
+};

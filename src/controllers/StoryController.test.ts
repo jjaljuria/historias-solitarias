@@ -4,22 +4,29 @@ import request from "supertest";
 import { app } from "../index";
 import { Story } from "../models/Story";
 import { Author } from "../models/Author";
-import { getByText, getByRole, screen } from "@testing-library/dom";
-import { Document, Window } from "happy-dom";
+import { getByRole } from "@testing-library/dom";
+import { Window } from "happy-dom";
 
 const mockOffsetFunction = vi.fn();
 
-Story.find = (): any => ({
-  populate: (path: string) => ({
-    skip: (offset: number) => {
-      mockOffsetFunction(offset);
-      return {
-        limit: (lim: number) => Promise.resolve([]),
-      };
-    },
-  }),
+vi.mock("../models/Story", () => {
+  const Story = vi.fn();
+
+  Story.prototype.find = (): any => ({
+    populate: (path: string) => ({
+      skip: (offset: number) => {
+        mockOffsetFunction(offset);
+        return {
+          limit: (lim: number) => Promise.resolve([]),
+        };
+      },
+    }),
+  });
+  Story.prototype.count = (): number => 10;
+  Story.prototype.save = vi.fn();
+
+  return { Story };
 });
-Story.count = (): number => 10;
 
 Author.findById = vi.fn((id: string) => {
   if (id === "000") {
@@ -91,12 +98,19 @@ describe("StoryController", () => {
       getByRole(document, "button", { name: "Guardar" });
     });
 
-    it("should respond a id of the story", async () => {
+    it("should exist saveStory handler", () => {
+      expect(StoryController.saveStory).toBeDefined();
+    });
+
+    it.only("should respond a id of the story", async () => {
       const story = {
         title: "the epic story",
-        body: "",
+        body: "super content ".repeat(50),
+        idAuthor: "123456789",
       };
-      const response = await request(app).post("/new-story", {});
+
+      const response = await request(app).post("/new-story").send(story);
+      expect(response.statusCode).toBe(204);
     });
   });
 });
