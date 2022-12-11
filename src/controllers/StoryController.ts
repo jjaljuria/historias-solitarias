@@ -63,3 +63,17 @@ export const saveStory: RequestHandler = async (req, res) => {
     return res.status(500);
   }
 };
+
+export const deleteStory: RequestHandler = async (req, res) => {
+  const { id } = req.body;
+  try {
+    const storyDeleted = await Story.findByIdAndDelete(id);
+    if (!storyDeleted)
+      return res.json("Story that you wanted delete not exist");
+
+    return res.json(storyDeleted);
+  } catch (err) {
+    console.trace(err);
+    return res.send("Ups have a error");
+  }
+};

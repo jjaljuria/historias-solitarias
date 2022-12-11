@@ -6,6 +6,7 @@ const router: Router = Router();
 
 router.get("/stories", StoryController.getStories);
 router.get("/story/:id", StoryController.getStory);
+router.delete("/story", StoryController.deleteStory);
 router.get("/new-story", StoryController.newStory);
 router.post("/new-story", StoryController.saveStory);
 
