@@ -4,7 +4,7 @@ import request from "supertest";
 import { app } from "../index";
 import { Story } from "../models/Story";
 import { Author } from "../models/Author";
-import { getByRole } from "@testing-library/dom";
+import { getByRole, getByText } from "@testing-library/dom";
 import { Window } from "happy-dom";
 
 const mockOffsetFunction = vi.fn();
@@ -12,7 +12,7 @@ const mockOffsetFunction = vi.fn();
 vi.mock("../models/Story", () => {
   const Story = vi.fn();
 
-  Story.prototype.find = (): any => ({
+  Story.find = (): any => ({
     populate: (path: string) => ({
       skip: (offset: number) => {
         mockOffsetFunction(offset);
@@ -22,7 +22,7 @@ vi.mock("../models/Story", () => {
       },
     }),
   });
-  Story.prototype.count = (): number => 10;
+  Story.count = (): Promise<number> => Promise.resolve(10);
   Story.prototype.save = vi.fn();
 
   return { Story };
@@ -77,7 +77,7 @@ describe("StoryController", () => {
 
   describe("URL /new-story", () => {
     const window = new Window();
-    document = window.document;
+    const document = window.document;
 
     afterEach(() => (document.body.innerHTML = ""));
 
@@ -102,7 +102,7 @@ describe("StoryController", () => {
       expect(StoryController.saveStory).toBeDefined();
     });
 
-    it.only("should respond a id of the story", async () => {
+    it("should respond a id of the story", async () => {
       const story = {
         title: "the epic story",
         body: "super content ".repeat(50),
@@ -110,7 +110,7 @@ describe("StoryController", () => {
       };
 
       const response = await request(app).post("/new-story").send(story);
-      expect(response.statusCode).toBe(204);
+      expect(response.statusCode).toBe(302);
     });
   });
 });
