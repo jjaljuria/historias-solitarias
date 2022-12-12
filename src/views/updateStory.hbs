@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-4 offset-md-4">
+      <form action="/new-story" method="post" class="p-3 bg-light rounded mt-5">
+        <div class="mb-3">
+          <label for="titulo" class="form-label">titulo</label>
+          <input
+            type="text"
+            name="title"
+            id="titulo"
+            class="form-control"
+            required
+            value="{{story.title}}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="contenido" class="form-label">contenido</label>
+          <textarea
+            class="form-control"
+            name="body"
+            id="contenido"
+            cols="30"
+            rows="10"
+            value="{{story.body}}"
+          >{{story.body}}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </form>
+    </div>
+  </div>
+
+</div>

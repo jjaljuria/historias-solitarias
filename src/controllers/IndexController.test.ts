@@ -2,11 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import hbs from "express-handlebars";
 import { getAllByText } from "@testing-library/dom";
 import request from "supertest";
-import { app } from "../index";
+import { app } from "../app";
 import { Window } from "happy-dom";
 import { IAuthor, Author } from "../models/Author";
 import { Story, IStory } from "../models/Story";
-import mongoose from "mongoose";
 
 const author: IAuthor = {
   username: "jose",

@@ -6,8 +6,7 @@
   "scripts": {
     "test": "vitest",
     "dev": "ts-node-dev src/index.ts",
-    "start": "node src/index.js",
-    "seed": "ts-node src/seeds/index.ts"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "author": "Jośe Aljuria",

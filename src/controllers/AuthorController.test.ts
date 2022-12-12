@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import * as AuthorController from "./AuthorController";
 import { Author } from "../models/Author";
 import request from "supertest";
-import { app } from "../index";
+import { app } from "../app";
 
 Author.findById = vi.fn((id: string) => {
   if (id === "000") {

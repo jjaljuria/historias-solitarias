@@ -77,3 +77,37 @@ export const deleteStory: RequestHandler = async (req, res) => {
     return res.send("Ups have a error");
   }
 };
+
+export const updateStory: RequestHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const story = await Story.findById(id);
+
+    if (!story) res.status(404);
+
+    return res.render("updateStory", {
+      story,
+    });
+  } catch (err) {
+    return res.json("Ups have a error");
+  }
+};
+
+export const saveUpdatedStory: RequestHandler = async (req, res) => {
+  const { id, title, body } = req.body;
+  try {
+    const story = await Story.findById(id);
+
+    if (story === null) return res.status(404);
+
+    story.title = title;
+    story.body = body;
+
+    // save ejecuta un middleware para obtener el summary
+    await story.save();
+
+    return res.redirect(`/story/${story.id}`);
+  } catch (err) {
+    return res.json("Ups have a error");
+  }
+};
