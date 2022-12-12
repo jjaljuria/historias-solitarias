@@ -7,6 +7,10 @@
         <p class="">{{story.summary}}...</p>
         <a href="/story/{{story.id}}" class="btn btn-primary">Ver</a>
         <a class="btn btn-success" href="/update-story/{{story.id}}">Editar</a>
+        <a
+          class="btn btn-danger deleteStoryButton"
+          data-idStory="{{story.id}}"
+        >Borrar</a>
       </div>
     </div>
 

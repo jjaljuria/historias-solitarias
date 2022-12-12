@@ -66,10 +66,12 @@ export const saveStory: RequestHandler = async (req, res) => {
 
 export const deleteStory: RequestHandler = async (req, res) => {
   const { id } = req.body;
+  console.log(id);
+  console.log(req.body);
   try {
     const storyDeleted = await Story.findByIdAndDelete(id);
-    if (!storyDeleted)
-      return res.json("Story that you wanted delete not exist");
+    // if (!storyDeleted)
+    //   return res.json("Story that you wanted delete not exist");
 
     return res.json(storyDeleted);
   } catch (err) {
