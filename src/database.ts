@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import config from "./config";
 
 mongoose
-  .connect("mongodb://localhost:27017/historias_solitarias")
+  .connect(config.DATABASE_URI)
   .then(() => {
     console.log("database connected");
   })

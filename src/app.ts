@@ -10,6 +10,7 @@ import "./passport";
 import session from "express-session";
 import morgan from "morgan";
 import MongoStore from "connect-mongodb-session";
+import config from "./config";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -30,7 +31,7 @@ app.set("view engine", "hbs");
 
 const MongoDBStore = MongoStore(session);
 const store = new MongoDBStore({
-  uri: "mongodb://localhost:27017/historias_solitarias",
+  uri: config.DATABASE_URI,
   collection: "sessions",
   expires: 1000 * 60 * 60 * 24 * 14,
 });
