@@ -11,6 +11,7 @@ import session from "express-session";
 import morgan from "morgan";
 import MongoStore from "connect-mongodb-session";
 import config from "./config";
+import methodOverride from "method-override";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -53,6 +54,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(methodOverride("_method"));
+
 // Routes
 app.use("/", IndexRouter);
 app.use(AuthorRouter);

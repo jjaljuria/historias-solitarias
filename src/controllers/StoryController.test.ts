@@ -193,6 +193,7 @@ describe("StoryController", () => {
       const response = await request(app).put("/story").send(story).expect(302);
       expect(response.header.location).toBe(`/story/${story.id}`);
       expect(Story.prototype.save).toHaveBeenCalled();
+      expect(mockFindById).toHaveBeenCalledWith(story.id);
     });
 
     it("should respond with Ups have a error when throw exception", async () => {

@@ -1,7 +1,12 @@
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-4 offset-md-4">
-      <form action="/new-story" method="post" class="p-3 bg-light rounded mt-5">
+      <form
+        action="/story?_method=PUT"
+        method="post"
+        class="p-3 bg-light rounded mt-5"
+      >
+        <input type="hidden" name="id" value="{{story.id}}" />
         <div class="mb-3">
           <label for="titulo" class="form-label">titulo</label>
           <input
