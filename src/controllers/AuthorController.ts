@@ -55,3 +55,32 @@ export const login: RequestHandler = (req, res) => {
 export const verifyAuthor: RequestHandler = (req, res) => {
   return res.redirect("/");
 };
+
+export const editAuthor: RequestHandler = async (req, res) => {
+  try {
+    const author = await Author.findOne();
+    return res.render("editAuthor", { author });
+  } catch (err) {
+    return res.json("Ups have a problem on server");
+  }
+};
+
+export const updateAuthor: RequestHandler = async (req, res) => {
+  const { username, description } = req.body;
+
+  try {
+    const author = await Author.findOne();
+
+    if (!author) {
+      return res.sendStatus(404);
+    }
+
+    author.username = username;
+    author.description = description;
+
+    await author.save();
+  } catch (err) {
+    return res.json("Ups have a error on server when save changes");
+  }
+  return res.sendStatus(204);
+};

@@ -16,5 +16,16 @@ router.post(
   AuthorController.verifyAuthor
 );
 
+router.get(
+  "/edit-author",
+  passport.authenticate("local"),
+  AuthorController.editAuthor
+);
+router.put(
+  "/author",
+  passport.authenticate("local"),
+  AuthorController.updateAuthor
+);
+
 router.get("/logup", AuthorController.logUp);
 export default router;

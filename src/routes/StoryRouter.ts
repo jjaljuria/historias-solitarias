@@ -1,6 +1,6 @@
 import { Router } from "express";
 import * as StoryController from "../controllers/StoryController";
-import { isUniqueTitle } from "../middlewares/isUniqueTitle";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router: Router = Router();
 
@@ -9,8 +9,8 @@ router.get("/story/:id", StoryController.getStory);
 router.get("/new-story", StoryController.newStory);
 router.get("/update-story/:id", StoryController.updateStory);
 
-router.delete("/story", StoryController.deleteStory);
-router.post("/new-story", StoryController.saveStory);
-router.put("/story", StoryController.saveUpdatedStory);
+router.delete("/story", isAuthenticated, StoryController.deleteStory);
+router.post("/new-story", isAuthenticated, StoryController.saveStory);
+router.put("/story", isAuthenticated, StoryController.saveUpdatedStory);
 
 export default router;

@@ -2,12 +2,19 @@ import { describe, expect, it, vi, afterEach, beforeEach } from "vitest";
 import * as StoryController from "./StoryController";
 import request from "supertest";
 import { app } from "../app";
-import { IStory, Story } from "../models/Story";
+import { Story } from "../models/Story";
 import { Author } from "../models/Author";
-import { getByDisplayValue, getByRole, getByText } from "@testing-library/dom";
+import { getByDisplayValue, getByRole } from "@testing-library/dom";
 import { Window } from "happy-dom";
 
 const mockOffsetFunction = vi.fn();
+
+vi.mock("../middlewares/isAuthenticated", () => {
+  const isAuthenticatedMock = (req: Request, res: Response, next: Function) =>
+    next();
+
+  return { default: isAuthenticatedMock };
+});
 
 vi.mock("../models/Story", () => {
   const Story = vi.fn();
@@ -77,25 +84,12 @@ describe("StoryController", () => {
 
     afterEach(() => (document.body.innerHTML = ""));
 
-    it("should exist newStory", () => {
-      expect(StoryController.newStory).toBeDefined();
-    });
-
-    it("should respond status code 200", async () => {
-      const response = await request(app).get("/new-story");
-      expect(response.ok).toBeTruthy();
-    });
-
     it("should show titulo, contenido inputs and button Guardar", async () => {
       const response = await request(app).get("/new-story");
       document.body.innerHTML = response.text;
       getByRole(document, "textbox", { name: "titulo" });
       getByRole(document, "textbox", { name: "contenido" });
       getByRole(document, "button", { name: "Guardar" });
-    });
-
-    it("should exist saveStory handler", () => {
-      expect(StoryController.saveStory).toBeDefined();
     });
 
     it("should respond a id of the story", async () => {
