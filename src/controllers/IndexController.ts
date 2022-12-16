@@ -5,7 +5,7 @@ import { Author } from "../models/Author";
 export const home: RequestHandler = async (req, res) => {
   const author = await Author.findOne();
 
-  const stories = await Story.find({ author: author?.id }, null, { limit: 3 });
+  const stories = await Story.find().limit(3).sort({ _id: "desc" });
   res.render("index", {
     author,
     stories,

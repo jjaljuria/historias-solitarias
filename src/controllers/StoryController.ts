@@ -14,6 +14,7 @@ export const getStories: RequestHandler = async (req, res) => {
 
   try {
     const stories = await Story.find({})
+      .sort({ _id: "desc" })
       .populate("author")
       .skip(offset)
       .limit(limit);

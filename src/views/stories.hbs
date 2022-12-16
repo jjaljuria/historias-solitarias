@@ -1,20 +1,26 @@
 <main class="container">
-  {{#each stories as |story|}}
+    {{#each stories as |story|}}
 
-    <div class="card my-2">
-      <div class="card-body">
-        <h3 class="card-title">{{story.title}}</h3>
-        <p class="">{{story.summary}}...</p>
-        <a href="/story/{{story.id}}" class="btn btn-primary">Ver</a>
-        <a class="btn btn-success" href="/update-story/{{story.id}}">Editar</a>
-        <a
-          class="btn btn-danger deleteStoryButton"
-          data-idStory="{{story.id}}"
-        >Borrar</a>
+      <div class="card my-2">
+        <div class="card-body">
+          <h3 class="card-title">{{story.title}}</h3>
+          <p class="">{{story.summary}}...</p>
+          <a href="/story/{{story.id}}" class="btn btn-primary">Ver</a>
+
+          {{#if ../isAuthenticated}}
+            <a
+              class="btn btn-success"
+              href="/update-story/{{story.id}}"
+            >Editar</a>
+            <a
+              class="btn btn-danger deleteStoryButton"
+              data-idStory="{{story.id}}"
+            >Borrar</a>
+          {{/if}}
+        </div>
       </div>
-    </div>
 
-  {{/each}}
+    {{/each}}
 
   {{{for pagination}}}
 

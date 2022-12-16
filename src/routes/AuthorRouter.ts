@@ -1,6 +1,7 @@
 import { Router } from "express";
 import * as AuthorController from "../controllers/AuthorController";
 import passport from "passport";
+import isAuthenticated from "../middlewares/isAuthenticated";
 
 const router: Router = Router();
 
@@ -16,16 +17,8 @@ router.post(
   AuthorController.verifyAuthor
 );
 
-router.get(
-  "/edit-author",
-  passport.authenticate("local"),
-  AuthorController.editAuthor
-);
-router.put(
-  "/author",
-  passport.authenticate("local"),
-  AuthorController.updateAuthor
-);
+router.get("/edit-author", isAuthenticated, AuthorController.editAuthor);
+router.put("/author", isAuthenticated, AuthorController.updateAuthor);
 
 router.get("/logup", AuthorController.logUp);
 export default router;
