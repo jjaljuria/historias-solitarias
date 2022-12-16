@@ -7,8 +7,6 @@ import { Author } from "../models/Author";
 import { getByDisplayValue, getByRole } from "@testing-library/dom";
 import { Window } from "happy-dom";
 
-const mockOffsetFunction = vi.fn();
-
 vi.mock("../middlewares/isAuthenticated", () => {
   const isAuthenticatedMock = (req: Request, res: Response, next: Function) =>
     next();
@@ -18,18 +16,6 @@ vi.mock("../middlewares/isAuthenticated", () => {
 
 vi.mock("../models/Story", () => {
   const Story = vi.fn();
-
-  Story.find = (): any => ({
-    populate: (path: string) => ({
-      skip: (offset: number) => {
-        mockOffsetFunction(offset);
-        return {
-          limit: (lim: number) => Promise.resolve([]),
-        };
-      },
-    }),
-  });
-  Story.count = (): Promise<number> => Promise.resolve(10);
   Story.prototype.save = vi.fn();
 
   return { Story };
@@ -56,7 +42,30 @@ describe("StoryController", () => {
   });
 
   describe("URL /stories", () => {
+    afterEach(() => {
+      mockOffsetFunction.mockReset();
+    });
+
+    const mockOffsetFunction = vi.fn((lim: number) => Promise.resolve([]));
+
+    Story.find = (): any => ({
+      sort: () => ({
+        populate: () => ({
+          skip: (offset: number) => {
+            mockOffsetFunction(offset);
+            return {
+              limit: (lim: number) => {
+                return Promise.resolve([]);
+              },
+            };
+          },
+        }),
+      }),
+    });
+    Story.count = (): Promise<number> => Promise.resolve(10);
+
     it("should return reponse 200 and have offse 0", async () => {
+      mockOffsetFunction.mockReset();
       const response = await request(app).get("/stories");
       expect(response.statusCode).toBe(200);
       expect(mockOffsetFunction).toHaveBeenCalledWith(0);

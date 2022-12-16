@@ -1,11 +1,11 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import * as AuthorController from "./AuthorController";
 import { Author } from "../models/Author";
 import request from "supertest";
 import { app } from "../app";
-import { getByRole, getByText } from "@testing-library/dom";
+import { getByRole } from "@testing-library/dom";
 import { Window } from "happy-dom";
-import UserEvent from "@testing-library/user-event";
+import { RequestHandler, Response } from "express";
 
 const window = new Window();
 const document = window.document;
@@ -72,6 +72,11 @@ describe("AuthorController", () => {
   });
 
   describe("edit author info", () => {
+    vi.mock("../middlewares/isAuthenticated", () => {
+      const mockIsAuthenticated: RequestHandler = (req, res, next) => next();
+
+      return { default: mockIsAuthenticated };
+    });
     Author.findOne = vi.fn();
     const saveMock = vi.fn();
 
