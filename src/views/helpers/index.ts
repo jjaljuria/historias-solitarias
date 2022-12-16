@@ -13,10 +13,11 @@ export default {
       date.getMonth() - 1
     }-${date.getFullYear()}`;
   },
+
   for: function (pagination: paginationInfo) {
-    let res = `${
-      pagination.currentPage
-    }<ul class="pagination justify-content-center">
+    if (pagination.totalPages === 1) return;
+
+    let res = `<ul class="pagination justify-content-center">
     <li class="page-item ${pagination.currentPage === 0 && "disabled"}">
 		<a class="page-link" arial-label="Previous" href="/stories?offset=${
       (pagination.currentPage - 1) * pagination.storiesForPage
