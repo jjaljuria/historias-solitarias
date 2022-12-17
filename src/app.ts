@@ -66,16 +66,6 @@ app.use("/", IndexRouter);
 app.use(AuthorRouter);
 app.use(StoryRouter);
 
-app.post("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.trace(err);
-    }
-
-    res.redirect("/");
-  });
-});
-
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
 app.use(

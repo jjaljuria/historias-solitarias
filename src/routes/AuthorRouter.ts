@@ -21,4 +21,7 @@ router.get("/edit-author", isAuthenticated, AuthorController.editAuthor);
 router.put("/author", isAuthenticated, AuthorController.updateAuthor);
 
 router.get("/logup", AuthorController.logUp);
+
+router.post("/logout", AuthorController.logout);
+
 export default router;

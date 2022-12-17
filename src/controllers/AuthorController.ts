@@ -52,6 +52,16 @@ export const login: RequestHandler = (req, res) => {
   return res.render("login", { errors: messages });
 };
 
+export const logout: RequestHandler = (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      console.trace(err);
+    }
+
+    res.redirect("/");
+  });
+};
+
 export const verifyAuthor: RequestHandler = (req, res) => {
   return res.redirect("/");
 };
