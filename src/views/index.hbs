@@ -20,7 +20,7 @@
     <div class="card mb-4">
       <div class="card-body">
         <h3 class="card-title">{{story.title}}</h3>
-        <p class="">{{story.summary}}</p>
+        <p class="">{{truncate story.summary 239}}</p>
         <a href="/story/{{story.id}}" class="btn btn-primary">Ver</a>
       </div>
     </div>
