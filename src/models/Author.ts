@@ -13,12 +13,18 @@ export interface IAuthor {
   username: string;
   password: string;
   description: string;
+  email: string;
 }
 
 type AuthorModel = Model<IAuthor, {}, IAuthorMethods>;
 
 const authorSchema: Schema = new Schema<IAuthor, AuthorModel, IAuthorMethods>(
   {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     username: {
       type: String,
       required: true,

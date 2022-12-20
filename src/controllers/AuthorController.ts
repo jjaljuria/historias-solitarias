@@ -20,6 +20,7 @@ export const logUp: RequestHandler = async (req, res) => {
     let newAuthor = await Author.findOne({ username: "jose" });
     if (!newAuthor) {
       newAuthor = await Author.create({
+        email: "josejavieral13@gmail.com",
         username: "jose",
         description: faker.lorem.paragraph(),
         password: await Author.encryptPassword("12345"),

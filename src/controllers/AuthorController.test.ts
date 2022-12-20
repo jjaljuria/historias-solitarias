@@ -47,6 +47,7 @@ describe("AuthorController", () => {
     it("should when success authenticate redirect to / ", async () => {
       const author = {
         id: "12345",
+        email: "josejavieral13@gmail.com",
         username: "jose",
         password: "12345",
         description: "",
