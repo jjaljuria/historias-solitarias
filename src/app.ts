@@ -13,8 +13,6 @@ import MongoStore from "connect-mongodb-session";
 import config from "./config";
 import methodOverride from "method-override";
 import setPartialsData from "./middlewares/setPartialsData";
-import { ifError } from "assert";
-import { nextTick } from "process";
 
 const app = express();
 app.set("views", path.join(__dirname, "views"));
@@ -26,7 +24,6 @@ app.engine(
     runtimeOptions: {
       allowProtoPropertiesByDefault: true,
       allowProtoMethodsByDefault: true,
-      data: { isAuthenticated: true },
     },
     helpers: Helpers,
   })

@@ -1,7 +1,7 @@
 const truncate = (text: string, limit: number): string => {
   let truncatedText = "";
 
-  if (text.length <= limit) {
+  if (text === undefined || text.length <= limit) {
     return text;
   }
 
